@@ -4,12 +4,12 @@ jimport( 'joomla.plugin.plugin' );
 
 class plgSystemVarnishPurge extends JPlugin {
     public function onContentAfterSave( $context, $item, $isNew ) {
-        if ( $context == 'com_content.article' ) {
-            $this->purgeCache( JRoute::_( ContentHelperRoute::getArticleRoute( $item->id, $item->catid ) ) );
-            $this->purgeCache( ContentHelperRoute::getCategoryRoute( $item->catid ) );
+        if ( $context === 'com_content.article' ) {
+            $this->purgeCache( \Joomla\CMS\Router\Route::_( ContentHelperRoute::getArticleRoute( $item->id, $item->catid ) ) );
+            $this->purgeCache( \Joomla\CMS\Router\Route::_( ContentHelperRoute::getCategoryRoute( $item->catid ) ) );
         }
-        if ( $context == 'com_categories.category' ) {
-            $this->purgeCache( ContentHelperRoute::getCategoryRoute( $item->id ) );
+        if ( $context === 'com_categories.category' ) {
+            $this->purgeCache( \Joomla\CMS\Router\Route::_( ContentHelperRoute::getCategoryRoute( $item->id ) ) );
         }
     }
 
@@ -26,7 +26,7 @@ class plgSystemVarnishPurge extends JPlugin {
         $result = curl_exec( $curl );
         curl_close( $curl );
 
-        JFactory::getApplication()->enqueueMessage('⚡ Varnish cache: URL [' . $urlFormatted[ 'url' ] . '] wurde gepurged.');
+        JFactory::getApplication()->enqueueMessage('⚡ Varnish cache: URL [ "' . $urlFormatted[ 'url' ] . '" ] wurde gepurged.');
 
         return true;
     }
