@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="3.9" group="system" method="upgrade">
+    <name>varnishpurge</name>
+    <creationDate>13/03/2023</creationDate>
+    <author>DI Philipp Salmutter</author>
+    <authorEmail>philipp@salmutter.net</authorEmail>
+    <authorUrl>https://www.salmutter.net/</authorUrl>
+    <copyright>salmutter.net 2023</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <version>0.1</version>
+    <description>Purge content URL on backend action.</description>
+
+    <files>
+        <filename plugin="varnishpurge">varnishpurge.php</filename>
+        <filename>index.html</filename>
+    </files>
+
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field name="varnish_host" type="text" default="127.0.0.1" label="Varnish Host" />
+                <field name="varnish_port" type="text" default="80" label="Varnish Port" />
+            </fieldset>
+        </fields>
+    </config>
+</extension>
