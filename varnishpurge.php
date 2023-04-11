@@ -19,17 +19,15 @@ class plgSystemVarnishPurge extends JPlugin {
     }
 
     protected function purgeCache( $url ) {
-        $urlFormatted = $url;
         $curl = curl_init();
         curl_setopt( $curl, CURLOPT_USERAGENT,'joomla_purgeCache');
         curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, 'PURGE' );
         curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt( $curl, CURLOPT_HTTPHEADER, ['Host: ' . $urlFormatted['hostname']]);
-        curl_setopt( $curl, CURLOPT_URL, $urlFormatted[ 'url' ] );
+        curl_setopt( $curl, CURLOPT_URL, $url );
         $result = curl_exec( $curl );
         curl_close( $curl );
 
-        JFactory::getApplication()->enqueueMessage('⚡ Varnish cache: URL [ "' . $urlFormatted[ 'url' ] . '" ] wurde gepurged.');
+        JFactory::getApplication()->enqueueMessage('⚡ Varnish cache: URL [ "' . $url . '" ] wurde gepurged.');
 
         return true;
     }
