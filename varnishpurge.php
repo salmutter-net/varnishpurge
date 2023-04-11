@@ -3,19 +3,22 @@ defined( '_JEXEC' ) or die;
 jimport( 'joomla.plugin.plugin' );
 
 class plgSystemVarnishPurge extends JPlugin {
+
     public function onContentAfterSave( $context, $item, $isNew ) {
         if ( $context === 'com_content.article' ) {
-            $this->purgeCache( \Joomla\CMS\Router\Route::_( ContentHelperRoute::getArticleRoute( $item->id, $item->catid ) ) );
-            $this->purgeCache( \Joomla\CMS\Router\Route::_( ContentHelperRoute::getCategoryRoute( $item->catid ) ) );
+            if ( !$isNew ) {
+                $this->purgeCache( rtrim( JURI::root(), '/') . \Joomla\CMS\Router\Route::link( 'site', ContentHelperRoute::getArticleRoute( $item->id, $item->catid ) ) );
+                $this->purgeCache( rtrim( JURI::root(), '/') . \Joomla\CMS\Router\Route::link( 'site', ContentHelperRoute::getCategoryRoute( $item->catid ) ) );
+            }
         }
         if ( $context === 'com_categories.category' ) {
-            $this->purgeCache( \Joomla\CMS\Router\Route::_( ContentHelperRoute::getCategoryRoute( $item->id ) ) );
+            if ( !$isNew ) {
+                $this->purgeCache( rtrim( JURI::root(), '/') . \Joomla\CMS\Router\Route::link( 'site', ContentHelperRoute::getCategoryRoute( $item->id ) ) );
+            }
         }
     }
 
     protected function purgeCache( $url ) {
-        $host = $this->params->get( 'varnish_host', '127.0.0.1' );
-        $port = $this->params->get( 'varnish_port', '80' );
         $urlFormatted = $this->getUrl($url);
         $curl = curl_init();
         curl_setopt( $curl, CURLOPT_USERAGENT,'joomla_purgeCache');
