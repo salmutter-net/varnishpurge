@@ -11,8 +11,6 @@ class plgSystemVarnishPurge extends JPlugin {
         if ( $context == 'com_categories.category' ) {
             $this->purgeCache( ContentHelperRoute::getCategoryRoute( $item->id ) );
         }
-
-        JFactory::getApplication()->enqueueMessage('⚡ Varnish cache: URL wurde gepurged.');
     }
 
     protected function purgeCache( $url ) {
@@ -27,6 +25,9 @@ class plgSystemVarnishPurge extends JPlugin {
         curl_setopt( $curl, CURLOPT_URL, $urlFormatted[ 'url' ] );
         $result = curl_exec( $curl );
         curl_close( $curl );
+
+        JFactory::getApplication()->enqueueMessage('⚡ Varnish cache: URL [' . $urlFormatted[ 'url' ] . '] wurde gepurged.');
+
         return true;
     }
 
