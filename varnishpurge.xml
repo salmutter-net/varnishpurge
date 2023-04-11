@@ -14,13 +14,4 @@
         <filename plugin="varnishpurge">varnishpurge.php</filename>
         <filename>index.html</filename>
     </files>
-
-    <config>
-        <fields name="params">
-            <fieldset name="basic">
-                <field name="varnish_host" type="text" default="127.0.0.1" label="Varnish Host" />
-                <field name="varnish_port" type="text" default="80" label="Varnish Port" />
-            </fieldset>
-        </fields>
-    </config>
 </extension>
