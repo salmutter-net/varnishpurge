@@ -24,7 +24,7 @@ class plgSystemVarnishPurge extends JPlugin {
         curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, 'PURGE' );
         curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
         curl_setopt( $curl, CURLOPT_HTTPHEADER, ['Host: ' . $urlFormatted['hostname']]);
-        curl_setopt( $curl, CURLOPT_URL, "$host:$port/purge/" . $urlFormatted[ 'url' ] );
+        curl_setopt( $curl, CURLOPT_URL, $urlFormatted[ 'url' ] );
         $result = curl_exec( $curl );
         curl_close( $curl );
         return true;
