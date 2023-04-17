@@ -52,7 +52,6 @@ class plgSystemVarnishPurge extends JPlugin {
         $result = curl_exec( $curl );
         curl_close( $curl );
 
-        JFactory::getApplication()->enqueueMessage('⚡ Varnish cache: URL [ "' . $url . '" ] wurde erneut gecached.');
         return true;
     }
 }
