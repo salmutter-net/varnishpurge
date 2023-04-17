@@ -16,6 +16,11 @@ class plgSystemVarnishPurge extends JPlugin {
                 $this->purgeCache( rtrim( JURI::root(), '/') . \Joomla\CMS\Router\Route::link( 'site', ContentHelperRoute::getCategoryRoute( $item->id ) ) );
             }
         }
+        if ( $context === 'com_contact.contact' ) {
+            if ( !$isNew ) {
+                $this->purgeCache( rtrim( JURI::root(), '/') . \Joomla\CMS\Router\Route::link( 'site', \Joomla\Component\Contact\Site\Helper\RouteHelper::getContactRoute($item->slug, $item->catslug, $item->language) ) );
+            }
+        }
     }
 
     protected function purgeCache( $url ) {
