@@ -21,6 +21,11 @@ class plgSystemVarnishPurge extends JPlugin {
                 $this->purgeCache( rtrim( JURI::root(), '/') . \Joomla\CMS\Router\Route::link( 'site', \Joomla\Component\Contact\Site\Helper\RouteHelper::getContactRoute($item->slug, $item->catslug, $item->language) ) );
             }
         }
+        if ( $context === 'com_menus.item' ) {
+            if ( !$isNew ) {
+                $this->purgeCache( rtrim( JURI::root(), '/' ) . \Joomla\CMS\Router\Route::link( 'site', 'index.php?Itemid='.$item->id) );
+            }
+        }
     }
 
     protected function purgeCache( $url ) {
@@ -34,29 +39,20 @@ class plgSystemVarnishPurge extends JPlugin {
 
         JFactory::getApplication()->enqueueMessage('⚡ Varnish cache: URL [ "' . $url . '" ] wurde gepurged.');
 
+        $this->cacheUrl($url);
+
         return true;
     }
 
-    private function getUrl( $url ) {
-        $parsedUrl = parse_url( $url );
-        $hostname = $parsedUrl[ 'host' ];
-        $address = gethostbyname( $hostname );
-        $url = $parsedUrl[ 'scheme' ] . '://' . $address;
-        if ( $parsedUrl[ 'port' ] ) {
-            $url .= ':' . $parsedUrl[ 'port' ];
-        }
-        if ( $parsedUrl[ 'path' ] ) {
-            $url .= $parsedUrl[ 'path' ];
-        }
-        if ( $parsedUrl[ 'query' ] ) {
-            $url .= '?' . $parsedUrl[ 'query' ];
-        }
-        if ( $parsedUrl[ 'fragment' ] ) {
-            $url .= '#' . $parsedUrl[ 'fragment' ];
-        }
-        return [
-            'url' => $url,
-            'hostname' => $hostname
-        ];
+    private function cacheUrl( $url ) {
+        $curl = curl_init();
+        curl_setopt( $curl, CURLOPT_USERAGENT,'joomla_warmCache');
+        curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
+        curl_setopt( $curl, CURLOPT_URL, $url );
+        $result = curl_exec( $curl );
+        curl_close( $curl );
+
+        JFactory::getApplication()->enqueueMessage('⚡ Varnish cache: URL [ "' . $url . '" ] wurde erneut gecached.');
+        return true;
     }
 }
